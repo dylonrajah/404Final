@@ -20,7 +20,7 @@ Genres:
 	   The Dark Knight
 	   Sherlock Holmes (2009)
 	   Dunkirk
-	   Isle of Dogs
+	   Indiana Jones and the Raiders of the Lost Ark
 	   The girl with the Dragon Tattoo
 	   
 	Horror
@@ -28,7 +28,7 @@ Genres:
 	   A Quiet Place
 	   Get Out
 	   Annabelle
-	   The cuse of la llorna
+	   The Curse of La Llorona
 	   The Ring
 	   Saw
 	   IT
@@ -36,6 +36,25 @@ Genres:
 	   A Nightmare on Elm Street
   	   
 	Romance
+	   Mamma Mia!
+	   Your Name.
+	   Fifty Shades of Grey
+	   A Start is Born
+	   Her
+	   Twilight
+	   The Notebook
+	   Casablanca
+	   Titanic
+	   Dirty Dancing
+
 	Sci-Fi
-	   Terminator
-	
+	   Godzilla vs. Kong
+	   Harry Potter and the Sorcerer's Stone
+	   Avengers: Endgame
+	   The Lord of the Rings: The Fellowship of the Ring
+	   Ready Player One
+	   Blade Runner 2049
+	   Transformers
+	   Star Wars: Episode VII - The Force Awakens
+	   Guardians of the Galaxy
+	   Cloverfield
