@@ -1,0 +1,41 @@
+Genres:
+	Comedy
+	   Hotel Transylvania 3
+	   Zombieland: Double Tap
+	   Grown Ups 
+	   Deadpool
+	   Superbad
+	   Step Brothers
+	   White Chicks
+	   Pink Panther
+	   Ace Ventura: Pet Detective
+	   Mrs. Doubtfire
+
+	Action
+	   Men in Black
+	   Taken
+	   Saving Private Ryan
+	   Skyfall
+	   John Wick
+	   The Dark Knight
+	   Sherlock Holmes (2009)
+	   Dunkirk
+	   Isle of Dogs
+	   The girl with the Dragon Tattoo
+	   
+	Horror
+	   Hereditary
+	   A Quiet Place
+	   Get Out
+	   Annabelle
+	   The cuse of la llorna
+	   The Ring
+	   Saw
+	   IT
+	   The Shining
+	   A Nightmare on Elm Street
+  	   
+	Romance
+	Sci-Fi
+	   Terminator
+	
