@@ -21,55 +21,15 @@ def getSoup(url):
 
 
 def getReviews(soup):
-    options = webdriver.ChromeOptions()
-    options.add_argument('--ignore-certificate-errors')
-    options.add_argument('--incognito')
-    options.add_argument('--headless')
-    driver = webdriver.Chrome("/usr/lib/chromium-browser/chromedriver", options=options)
-
-    driver.get("https://www.imdb.com/title/tt0468569/reviews?ref_=tt_ov_rt")
-    more_buttons = driver.find_element_by_class_name("moreLink")
-    for x in range(len(more_buttons)):
-        if more_buttons[x].is_displayed():
-            driver.execute_script("arguments[0].click();",more_buttons[x])
-            time.sleep(1)
-    page_source = driver.page_source
-
-    souper = BeautifulSoup(page_source,'lxml')
-
-    counter = 0
-    for item in souper.select(".review-container"):
-        title = item.select(".title")[0].text
-        review = item.select(".text")[0].text
-        counter += 1
-        print("Title: {}\n\nReview: {}\n\n".format(title, review))
-
-
-
-
-
-
-
-    userReviewRatings = [tag.previous_element for tag in soup.find_all('span', attrs={'class': 'point-scale'})]
-
-    n_index, p_index = minMax(list(map(int, userReviewRatings)))
     userReviewList = soup.find_all('a', attrs={'class': 'title'})
     userReviewFinal = []
 
-    """
     for i in range(len(userReviewList)):
         temp = userReviewList[i]
         newLink = "https://www.imdb.com" + temp['href']
         userReviewFinal.append(newLink)
-    """
 
-    n_review = userReviewList[n_index]
-    p_review = userReviewList[p_index]
-
-    n_review_link = "https://www.imdb.com" + n_review['href']
-    p_review_link = "https://www.imdb.com" + p_review['href']
-
-    return n_review_link, p_review_link
+    return userReviewFinal
 
 
 global count
@@ -77,6 +37,7 @@ count = 0
 
 
 def getReviewText(review_url):
+    print(review_url)
     global count
     soup = getSoup(review_url)
     count += 1
@@ -91,13 +52,6 @@ def getMovieTitle(review_url):
     tag = soup.find('h1')
     print("--------------" + list(tag.children)[1].getText() + "-----------------------")
     return list(tag.children)[1].getText()
-
-
-def minMax(a):
-    minpos = a.index(min(a))
-    maxpos = a.index(max(a))
-
-    return minpos, maxpos
 
 
 def csvTotext(csvFile):
@@ -156,20 +110,19 @@ if __name__ == "__main__":
     movie_soup = [getSoup(link) for link in movie_links]
 
     movie_review_list = [getReviews(movie_soup) for movie_soup in movie_soup]
-
-    movie_review_list = list(itertools.chain(*movie_review_list))
+    print(len(movie_review_list))
 
     print("There are a total of " + str(len(movie_review_list)) + " individual movie reviews")
     print("Displaying 10 reviews")
     print(movie_review_list[:10])
 
+
+
     reviewText = [getReviewText(url) for url in movie_review_list]
 
     movieTitles = [getMovieTitle(url) for url in movie_review_list]
 
-    review_sentiment = np.array(['negative', 'positive'] * (len(movie_review_list)//2))
-
-    df = pd.DataFrame({'Movie': movieTitles, 'Link to Review': movie_review_list, 'User Review': reviewText, 'Sentiment':review_sentiment})
+    df = pd.DataFrame({'Movie': movieTitles, 'Link to Review': movie_review_list, 'User Review': reviewText})
 
     # df.head()
 
