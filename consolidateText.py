@@ -13,12 +13,6 @@ def combine(path,name):
 
 
 
-
-
-
-
-
-
 if __name__ == "__main__":
-    path = "/Users/dylonrajah/Desktop/404Final/GoodHorrorReviews/"
-    combine(path,"goodHorror.txt")
+    path = "/Users/dylonrajah/Desktop/404Final/GoodSciFi/"
+    combine(path,"GoodSciFi.txt")

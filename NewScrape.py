@@ -56,7 +56,10 @@ if __name__ == "__main__":
     totalBad = []
 
 
-    movie = "Your Name."
+
+    movie = "Harry Potter and the Sorcerer's Stone"
+
+
 
 
 
@@ -77,7 +80,7 @@ if __name__ == "__main__":
 
     # Click the link
     driver.implicitly_wait(20)
-    driver.find_element_by_xpath("/html/body/div[7]/div/div[9]/div[1]/div/div[2]/div[2]/div/div/div[1]/div/div/div/div/div/div[1]/a").click()
+    driver.find_element_by_xpath("/html/body/div[7]/div/div[9]/div[1]/div/div[2]/div[2]/div/div/div[1]/div/div/div/div/div[1]/a").click()
     driver.implicitly_wait(20)
 
     # Click the user reviews
