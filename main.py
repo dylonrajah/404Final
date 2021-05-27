@@ -1,9 +1,11 @@
+import re
+
 def load_reviews():
     badActionList = []
     badActionString = ""
     with open('CombinedVocabs/badAction.txt', 'r') as badAction:
         for line in badAction:
-            badActionString += remove_combined_words(line) + " "
+            badActionString += re.sub(' +', ' ', remove_combined_words(line).replace('\n', '')) + " "
         badActionList.append(badActionString)
     print(badActionList)
 
