@@ -2,6 +2,16 @@ import re
 import nltk
 nltk.download('averaged_perceptron_tagger')
 
+aspects = ['Screenplay', 'Music', 'Acting', 'Plot', 'Movie', 'Direction']
+aspect_words = [
+    ['scene', 'scenery', 'animation', 'violence', 'screenplay', 'action', 'animation', 'shot', 'visual', 'prop', 'camera', 'graphic', 'stunt', 'special effect', 'violent', 'violence'],
+    ['music', 'score', 'lyric', 'sound', 'audio', 'musical', 'title track', 'sound effect', 'sound track', 'song'],
+    ['acting', 'role playing', 'act', 'actress', 'actor', 'role', 'potray', 'character', 'villian', 'performance', 'performed', 'played', 'casting', 'cast'],
+    ['plot', 'story', 'storyline', 'tale', 'romance', 'dialog', 'script', 'storyteller', 'ending', 'storytelling', 'revenge', 'betrayal', 'writing', 'twist', 'drama', 'dialog'],
+    ['movie', 'film', 'picture', 'moving picture', 'motion picture', 'show', 'picture show', 'pic', 'flick', 'romantic comedy'],
+    ['directing', 'direct', 'direction', 'director', 'filmed', 'filming', 'film making', 'filmmaker', 'cinematic', 'edition', 'cinematography', 'edition', 'rendition']
+]
+
 def load_review(fileName):
     output = ""
     with open('CombinedVocabs/' + fileName) as badAction:
@@ -25,7 +35,6 @@ def load_review(fileName):
         outputListTagged.append(nltk.pos_tag(tokenizedSentence))
 
     return outputListTagged
-
 
 if __name__ == '__main__':
     badActionTags = load_review('badAction.txt')
