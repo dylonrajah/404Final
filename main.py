@@ -1,33 +1,40 @@
 import re
+import nltk
+nltk.download('averaged_perceptron_tagger')
 
-def load_reviews():
-    badActionList = []
-    badActionString = ""
-    with open('CombinedVocabs/badAction.txt', 'r') as badAction:
-        for line in badAction:
-            badActionString += re.sub(' +', ' ', remove_combined_words(line).replace('\n', '')) + " "
-        badActionList.append(badActionString)
-    print(badActionList)
-
-def remove_combined_words(sentence):
+def load_review(fileName):
     output = ""
-    splitSentence = sentence.split(' ')
-    for i in splitSentence:
-        if i[1:] != i[1:].lower() and i[1:] != i[1:].upper():
-            for j in range(1, len(i[1:])):
-                if i[j] == i[j].upper() and i[j-1] == i[j-1].lower():
-                    output += i[:j].lower() + " "
-                    output += i[j:].lower() + " "
-                    break
-        else:
-            output += i.lower() + " "
-    return output
+    with open('CombinedVocabs/' + fileName) as badAction:
+        output = badAction.read().replace('\n', '')
+        output = re.sub(r'\?+', '.', output)
+        output = re.sub(r'\!+', '.', output)
+        output = re.sub(r'\.+', '.', output)
+        outputList = output.split(".")
+    emptyIndices = []
+    for i in range(len(outputList)):
+        outputList[i] = outputList[i].strip()
+        outputList[i] = outputList[i].lower()
+        if outputList[i] == '':
+            emptyIndices.append(i)
+    for i in range(len(emptyIndices)):
+        del outputList[emptyIndices[-(i+1)]]
+
+    outputListTagged = []
+    for i in range(len(outputList)):
+        tokenizedSentence = nltk.word_tokenize(outputList[i])
+        outputListTagged.append(nltk.pos_tag(tokenizedSentence))
+
+    return outputListTagged
 
 
 if __name__ == '__main__':
-
-    sentence = "one two three fourFive six"
-    print(remove_combined_words(sentence))
-
-    load_reviews()
-    #badAction, badComedy, badHorror, badRomance, badSciFi, goodAction, goodComedy, goodHorror, goodRomance, goodSciFi = load_reviews()
+    badActionTags = load_review('badAction.txt')
+    badComedyTags = load_review('badComedy.txt')
+    badHorrorTags = load_review('badHorror.txt')
+    badRomanceTags = load_review('badRomance.txt')
+    badSciFiTags = load_review('badSciFi.txt')
+    goodActionTags = load_review('goodAction.txt')
+    goodComedyTags = load_review('goodComedy.txt')
+    goodHorrorTags = load_review('goodHorror.txt')
+    goodRomanceTags = load_review('goodRomance.txt')
+    goodSciFiTags = load_review('goodSciFi.txt')
