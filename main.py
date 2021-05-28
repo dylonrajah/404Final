@@ -12,17 +12,17 @@ aspect_words = [
     ['directing', 'direct', 'direction', 'director', 'filmed', 'filming', 'film making', 'filmmaker', 'cinematic', 'edition', 'cinematography', 'edition', 'rendition']
 ]
 
-
-
-
 #What aspects do people comment on for each genre
 #Common aspects among movies
 #common aspects among genres
 #Talk about similarities?
 
-def load_review(fileName):
+
+
+
+def load_review(filePath):
     output = ""
-    with open(fileName) as file:
+    with open(filePath, encoding='utf8') as file:
         output = file.read().replace('\n', '')
         output = re.sub(r'\?+', '.', output)
         output = re.sub(r'\!+', '.', output)
@@ -44,7 +44,7 @@ def load_review(fileName):
 
     return outputListTagged
 
-def extractTags(taggedList):
+def extract_tags(taggedList):
     nouns = []
     for i in taggedList:
         for j in i:
@@ -58,17 +58,7 @@ def extractTags(taggedList):
     #for i in list:
 
 
-
-
-
-
-
-
 if __name__ == '__main__':
-
-
-
-
 
     badActionTags = load_review('CombinedVocabs/badAction.txt')
     goodDunkirk = load_review('GenreReviews/GoodActionReviews/goodDunkirk.txt')
@@ -76,19 +66,18 @@ if __name__ == '__main__':
     #for i in goodDunkirk:
         #print(i)
 
-    extractedGoodDunkirk = extractTags(goodDunkirk)
-    countAspectWords(extractedGoodDunkirk)
+    extractedGoodDunkirk = extract_tags(goodDunkirk)
+    print(extractedGoodDunkirk)
+    #countAspectWords(extractedGoodDunkirk)
 
 
-    '''
-    badComedyTags = load_review('CombinedVocabs/badComedy.txt')
     
-    badHorrorTags = load_review('badHorror.txt')
-    badRomanceTags = load_review('badRomance.txt')
-    badSciFiTags = load_review('badSciFi.txt')
-    goodActionTags = load_review('goodAction.txt')
-    goodComedyTags = load_review('goodComedy.txt')
-    goodHorrorTags = load_review('goodHorror.txt')
-    goodRomanceTags = load_review('goodRomance.txt')
-    goodSciFiTags = load_review('goodSciFi.txt')
-    '''
+    badComedyTags = load_review('CombinedVocabs/badComedy.txt')
+    badHorrorTags = load_review('CombinedVocabs/badHorror.txt')
+    badRomanceTags = load_review('CombinedVocabs/badRomance.txt')
+    badSciFiTags = load_review('CombinedVocabs/badSciFi.txt')
+    goodActionTags = load_review('CombinedVocabs/goodAction.txt')
+    goodComedyTags = load_review('CombinedVocabs/goodComedy.txt')
+    goodHorrorTags = load_review('CombinedVocabs/goodHorror.txt')
+    goodRomanceTags = load_review('CombinedVocabs/goodRomance.txt')
+    goodSciFiTags = load_review('CombinedVocabs/goodSciFi.txt')
