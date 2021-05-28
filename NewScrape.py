@@ -23,6 +23,10 @@ def getReviews(url):
     film_title = url.get_text()
     print(film_title)
 
+    driver.find_element_by_xpath("/html/body/div[4]/div/div[2]/div[3]/div[1]/section/div[2]/div[4]/div/button").click()
+    #driver.find_element_by_xpath("/html/body/div[4]/div/div[2]/div[3]/div[1]/section/div[2]/div[4]/div/button").click()
+
+
     # Get the title of the review
     title_rev = all.select(".title")
     title = [t.get_text().replace("\n", "") for t in title_rev]
@@ -40,7 +44,7 @@ def getReviews(url):
 def createText(total, genre, type):
     longString = ""
     for i in range(len(total)):
-        for j in range(10):
+        for j in range((len(total[i]))):
             longString = longString + total[i][j]
 
     text_file = open(type + genre + ".txt", "w")
@@ -57,7 +61,7 @@ if __name__ == "__main__":
 
 
 
-    movie = "Harry Potter and the Sorcerer's Stone"
+    movie = "grown ups"
 
 
 
@@ -80,7 +84,7 @@ if __name__ == "__main__":
 
     # Click the link
     driver.implicitly_wait(20)
-    driver.find_element_by_xpath("/html/body/div[7]/div/div[9]/div[1]/div/div[2]/div[2]/div/div/div[1]/div/div/div/div/div[1]/a").click()
+    driver.find_element_by_xpath("/html/body/div[7]/div/div[9]/div[1]/div/div[2]/div[2]/div/div/div[1]/div/div/div/div/div/div[1]/a").click()
     driver.implicitly_wait(20)
 
     # Click the user reviews
