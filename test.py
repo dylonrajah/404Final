@@ -19,15 +19,20 @@ with open('GenreReviews/BadActionReviews/badDunkirk.txt', encoding='utf8') as f:
     text = re.sub(r'\?+', '.', text)
     text = re.sub(r'\!+', '.', text)
     text = re.sub(r'\.+', '.', text)
-    #print(text)
-    #print('---------------')
+    print(text)
+    print('---------------')
     doc = nlp(text)
+    for token in doc:
+        if token.
     sentences = list(doc.sents)
     for i in sentences:
         print('|' , i , '|')
 
 #DEPENDENCY PARSING
-text = 'this film had great acting'
+text = 'this Film had great acting.'
 doc = nlp(text)
+for token in doc:
+    if token.is_punct:
+        print(token, ' is a punct!')
 for token in doc:
     print(token.text, token.tag_, token.head.text, token.dep_)
