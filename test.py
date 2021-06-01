@@ -1,8 +1,24 @@
 import spacy
 from spacy import displacy
 
+#better preprocessing (remove numbers, fix joining of seperate words)
+#detecting incorrect dependency from opinion words EX: plot NN twist compound
+#add movie to movie aspect words
+
 #opinion lexicon
 #https://www.kaggle.com/nltkdata/opinion-lexicon
+
+aspects = ['Screenplay', 'Music', 'Acting', 'Plot', 'Movie', 'Direction']
+aspect_words = [
+    ['scene', 'scenery', 'animation', 'violence', 'screenplay', 'action', 'animation', 'shot', 'visual', 'prop', 'camera', 'graphic', 'stunt', 'special effect', 'violent', 'violence'],
+    ['music', 'score', 'lyric', 'sound', 'audio', 'musical', 'title track', 'sound effect', 'sound track', 'song'],
+    ['acting', 'role playing', 'act', 'actress', 'actor', 'role', 'portray', 'character', 'villian', 'performance', 'performed', 'played', 'casting', 'cast'],
+    ['plot', 'story', 'storyline', 'tale', 'romance', 'dialog', 'script', 'storyteller', 'ending', 'storytelling', 'revenge', 'betrayal', 'writing', 'twist', 'drama', 'dialogue'],
+    ['movie', 'film', 'picture', 'moving picture', 'motion picture', 'show', 'picture show', 'pic', 'flick', 'romantic comedy', 'filmography'],
+    ['directing', 'direct', 'direction', 'director', 'filmed', 'filming', 'film making', 'filmmaker', 'cinematic', 'edition', 'cinematography', 'edition', 'rendition']
+]
+
+aspect_words_combined = ['scene', 'scenery', 'animation', 'violence', 'screenplay', 'action', 'animation', 'shot', 'visual', 'prop', 'camera', 'graphic', 'stunt', 'special effect', 'violent', 'violence','music', 'score', 'lyric', 'sound', 'audio', 'musical', 'title track', 'sound effect', 'sound track', 'song','acting', 'role playing', 'act', 'actress', 'actor', 'role', 'portray', 'character', 'villian', 'performance', 'performed', 'played', 'casting', 'cast','plot', 'story', 'storyline', 'tale', 'romance', 'dialog', 'script', 'storyteller', 'ending', 'storytelling', 'revenge', 'betrayal', 'writing', 'twist', 'drama', 'dialogue','movie', 'film', 'picture', 'moving picture', 'motion picture', 'show', 'picture show', 'pic', 'flick', 'romantic comedy', 'filmography', 'directing', 'direct', 'direction', 'director', 'filmed', 'filming', 'film making', 'filmmaker', 'cinematic', 'edition', 'cinematography', 'edition', 'rendition']
 
 def get_opinion_dicts():
     with open('positive-words.txt') as f:
@@ -35,11 +51,12 @@ with open('GenreReviews/BadActionReviews/badDunkirk.txt', encoding='utf8') as f:
     for sentence in sentences:
         print('|' , sentence , '|')
         for token in sentence:
-            #print(token.text, token.tag_, token.head.text, token.dep_)
-            if token.text in positive_words:
+            if token.text in positive_words and token.head.text in aspect_words_combined:
                 print(token, ': pos')
-            if token.text in negative_words:
+                print(token.text, token.tag_, token.head.text, token.dep_)
+            if token.text in negative_words and token.head.text in aspect_words_combined:
                 print(token, ': neg')
+                print(token.text, token.tag_, token.head.text, token.dep_)
 
 #DEPENDENCY PARSING EXAMPLE
 text = 'this Film had great acting.'
