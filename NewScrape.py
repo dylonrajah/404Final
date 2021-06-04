@@ -10,7 +10,6 @@ import time
 
 
 def getReviews(url):
-
     page = requests.get(url)
     soup = BeautifulSoup(page.content, "html.parser")
     all = soup.find(id="main")
@@ -23,9 +22,12 @@ def getReviews(url):
     film_title = url.get_text()
     print(film_title)
 
-    driver.find_element_by_xpath("/html/body/div[4]/div/div[2]/div[3]/div[1]/section/div[2]/div[4]/div/button").click()
-    #driver.find_element_by_xpath("/html/body/div[4]/div/div[2]/div[3]/div[1]/section/div[2]/div[4]/div/button").click()
-
+    # If "Load More" Button Exists, click it
+    # Every page displays 25 reviews, pressing load more would load another 25 so no need to check it twice
+    if (driver.find_element_by_xpath(
+            "/html/body/div[4]/div/div[2]/div[3]/div[1]/section/div[2]/div[4]/div/button").click()):
+        driver.find_element_by_xpath(
+            "/html/body/div[4]/div/div[2]/div[3]/div[1]/section/div[2]/div[4]/div/button").click()
 
     # Get the title of the review
     title_rev = all.select(".title")
@@ -53,20 +55,10 @@ def createText(total, genre, type):
 
 
 if __name__ == "__main__":
-
-
-
     totalGood = []
     totalBad = []
 
-
-
     movie = "grown ups"
-
-
-
-
-
 
     # Set the web browser
     driver = webdriver.Chrome(executable_path=r"/Users/dylonrajah/Desktop/404Final/chromedriver")
@@ -84,18 +76,19 @@ if __name__ == "__main__":
 
     # Click the link
     driver.implicitly_wait(20)
-    driver.find_element_by_xpath("/html/body/div[7]/div/div[9]/div[1]/div/div[2]/div[2]/div/div/div[1]/div/div/div/div/div/div[1]/a").click()
+    driver.find_element_by_xpath(
+        "/html/body/div[7]/div/div[9]/div[1]/div/div[2]/div[2]/div/div/div[1]/div/div/div/div/div/div[1]/a").click()
     driver.implicitly_wait(20)
 
     # Click the user reviews
     driver.find_element_by_xpath(
-            "/html/body/div[4]/div/div[2]/div[5]/div[1]/div[2]/div/div[1]/div[1]/div[1]/a[3]").click()
+        "/html/body/div[4]/div/div[2]/div[5]/div[1]/div[2]/div/div[1]/div[1]/div[1]/a[3]").click()
 
     # Scrap IMBD review
 
     driver.implicitly_wait(20)
     driver.find_element_by_xpath(
-            "/html/body/div[4]/div/div[2]/div[3]/div[1]/section/div[2]/div[1]/form/div/div[3]/select/option[11]").click()
+        "/html/body/div[4]/div/div[2]/div[3]/div[1]/section/div[2]/div[1]/form/div/div[3]/select/option[11]").click()
 
     goodUrl = driver.current_url
     goodReview = getReviews(goodUrl)
@@ -103,8 +96,7 @@ if __name__ == "__main__":
 
     driver.implicitly_wait(20)
     driver.find_element_by_xpath(
-            "/html/body/div[4]/div/div[2]/div[3]/div[1]/section/div[2]/div[1]/form/div/div[3]/select/option[2]").click()
-
+        "/html/body/div[4]/div/div[2]/div[3]/div[1]/section/div[2]/div[1]/form/div/div[3]/select/option[2]").click()
 
     badUrl = driver.current_url
     badReview = getReviews(badUrl)
@@ -112,5 +104,5 @@ if __name__ == "__main__":
 
     driver.close()
 
-    createText(totalGood,movie,"good")
-    createText(totalBad,movie,"bad")
+    createText(totalGood, movie, "good")
+    createText(totalBad, movie, "bad")

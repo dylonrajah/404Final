@@ -28,6 +28,6 @@ def removePunc(path):
 
 
 if __name__ == "__main__":
-    path = "/Users/dylonrajah/Desktop/404Final/CombinedVocabs/GH.txt"
-    # combine(path,"GoodSciFi.txt")
-    removePunc(path)
+    path = "/Users/dylonrajah/Desktop/404Final/MoreReviewsPerMovie/SciFi/Good/"
+    combine(path,"newGoodSciFi.txt")
+    #removePunc(path)
