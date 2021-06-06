@@ -38,9 +38,9 @@ aspect_words_combined = ['scene', 'scenery', 'animation', 'violence', 'screenpla
 
 
 def get_opinion_dicts():
-    with open('positive-words.txt', 'rb') as f:
+    with open('positive-words.txt') as f:
         positive = f.read().splitlines()[30:]
-    with open('negative-words.txt', 'rb') as f:
+    with open('negative-words.txt') as f:
         negative = f.read().splitlines()[31:]
     return positive, negative
 
@@ -48,7 +48,7 @@ def get_opinion_dicts():
 positive_words, negative_words = get_opinion_dicts()
 
 # used for dependency visualization
-nlp = spacy.load("en_core_web_sm")
+nlp = spacy.load("en_core_web_trf")
 # displacy.serve(doc, style="dep")
 # serves on http://127.0.0.1:5000/
 
@@ -63,7 +63,7 @@ with open('MoreReviewsPerMovie/Action/Bad/NewbadDunkirk.txt', encoding='utf8') a
     text = re.sub(r'\!+', '.', text)
     text = re.sub(r'\.+', '.', text)
     # print(text)
-    print('---------------')
+    #print('---------------')
     doc = nlp(text)
     sentences = list(doc.sents)
     # displacy.serve(sentences, style="dep")
@@ -71,15 +71,21 @@ with open('MoreReviewsPerMovie/Action/Bad/NewbadDunkirk.txt', encoding='utf8') a
         if len(sentence) > 2:
             print('|', sentence, '|')
             for token in sentence:
-                if token.text in positive_words:  # and token.head.text in aspect_words_combined:
-                    print(token, ': pos')
-                    print(token.text, token.tag_, token.head.text, token.dep_)
-                if token.text in negative_words:  # and token.head.text in aspect_words_combined:
-                    print(token, ': neg')
-                    print(token.text, token.tag_, token.head.text, token.dep_)
+                for child in token.children:
+                    if child.text in positive_words and token.text in aspect_words_combined:
+                        print(child.text, ': pos')
+                        print(child.text, token.text, child.dep_)
+                    if child.text in negative_words and token.text in aspect_words_combined:
+                        print(child.text, ': neg')
+                        print(child.text, token.text, child.dep_)
 
 # DEPENDENCY PARSING EXAMPLE
-# text = 'this Film had great acting.'
-# doc = nlp(text)
-# for token in doc:
-# print(token.text, token.tag_, token.head.text, token.dep_)
+text = 'this Film had great acting.'
+doc = nlp(text)
+for token in doc:
+    print("|| ", token.text, "||")
+    for child in token.children:
+        print(child.text)
+    #print(token.text, token.tag_, token.head.text, token.dep_)
+
+displacy.serve(doc, style="dep")
