@@ -37,15 +37,19 @@ aspect_words_combined = ['scene', 'scenery', 'animation', 'violence', 'screenpla
                          'rendition']
 
 
-def get_opinion_dicts():
+def get_opinion_lists():
     with open('positive-words.txt') as f:
         positive = f.read().splitlines()[30:]
     with open('negative-words.txt') as f:
         negative = f.read().splitlines()[31:]
-    return positive, negative
+    with open('Opinions/positiveWords.txt') as f:
+        newpositive = f.read().splitlines()
+    with open('Opinions/negativeWords.txt') as f:
+        newnegative = f.read().splitlines()[31:]
+    return positive, negative, newpositive, newnegative
 
 
-positive_words, negative_words = get_opinion_dicts()
+positive_words, negative_words, new_positive_words, new_negative_words = get_opinion_lists()
 
 # used for dependency visualization
 nlp = spacy.load("en_core_web_trf")
@@ -69,18 +73,18 @@ with open('MoreReviewsPerMovie/Action/Bad/NewbadDunkirk.txt', encoding='utf8') a
     # displacy.serve(sentences, style="dep")
     for sentence in sentences:
         if len(sentence) > 2:
-            print('|', sentence, '|')
+            #print('|', sentence, '|')
             for token in sentence:
                 for child in token.children:
-                    if child.text in positive_words and token.text in aspect_words_combined:
+                    if child.text in new_positive_words and token.text in aspect_words_combined:
                         print(child.text, ': pos')
                         print(child.text, token.text, child.dep_)
-                    if child.text in negative_words and token.text in aspect_words_combined:
+                    if child.text in new_negative_words and token.text in aspect_words_combined:
                         print(child.text, ': neg')
                         print(child.text, token.text, child.dep_)
 
 # DEPENDENCY PARSING EXAMPLE
-text = 'this Film had great acting.'
+text = 'hi'
 doc = nlp(text)
 for token in doc:
     print("|| ", token.text, "||")
@@ -88,4 +92,4 @@ for token in doc:
         print(child.text)
     #print(token.text, token.tag_, token.head.text, token.dep_)
 
-displacy.serve(doc, style="dep")
+#displacy.serve(doc, style="dep")

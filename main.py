@@ -12,13 +12,17 @@ aspect_words = [
     ['directing', 'direct', 'direction', 'director', 'filmed', 'filming', 'film making', 'filmmaker', 'cinematic', 'edition', 'cinematography', 'edition', 'rendition']
 ]
 
-#What aspects do people comment on for each genre
-#Common aspects among movies
-#common aspects among genres
-#Talk about similarities?
-
-
-
+#load all the reviews in a usable way for use in the model
+#get more aspect words
+#filter out unwanted matches based on depencency
+#bring model from test.py to main.py
+#tally/evaluate results
+#finalize conclusions:
+    #What aspects do people comment on for each genre
+    #Common aspects among movies
+    #common aspects among genres
+    #Talk about similarities?
+#final report
 
 def load_review(filePath):
     output = ""
