@@ -1,16 +1,12 @@
+import os
 import re
 import nltk
 nltk.download('averaged_perceptron_tagger')
+import spacy
+from spacy import displacy
+nlp = spacy.load("en_core_web_trf")
 
-aspects = ['Screenplay', 'Music', 'Acting', 'Plot', 'Movie', 'Direction']
-aspect_words = [
-    ['scene', 'scenery', 'animation', 'violence', 'screenplay', 'action', 'animation', 'shot', 'visual', 'prop', 'camera', 'graphic', 'stunt', 'special effect', 'violent', 'violence'],
-    ['music', 'score', 'lyric', 'sound', 'audio', 'musical', 'title track', 'sound effect', 'sound track', 'song'],
-    ['acting', 'role playing', 'act', 'actress', 'actor', 'role', 'portray', 'character', 'villian', 'performance', 'performed', 'played', 'casting', 'cast'],
-    ['plot', 'story', 'storyline', 'tale', 'romance', 'dialog', 'script', 'storyteller', 'ending', 'storytelling', 'revenge', 'betrayal', 'writing', 'twist', 'drama', 'dialogue'],
-    ['movie', 'film', 'picture', 'moving picture', 'motion picture', 'show', 'picture show', 'pic', 'flick', 'romantic comedy', 'filmography'],
-    ['directing', 'direct', 'direction', 'director', 'filmed', 'filming', 'film making', 'filmmaker', 'cinematic', 'edition', 'cinematography', 'edition', 'rendition']
-]
+
 
 #load all the reviews in a usable way for use in the model
 #get more aspect words
@@ -23,6 +19,22 @@ aspect_words = [
     #common aspects among genres
     #Talk about similarities?
 #final report
+
+aspects = ['Screenplay', 'Music', 'Acting', 'Plot', 'Movie', 'Direction']
+aspect_words = [
+    ['scene', 'scenery', 'animation', 'violence', 'screenplay', 'action', 'animation', 'shot', 'visual', 'prop', 'camera', 'graphic', 'stunt', 'special effect', 'violent', 'violence'],
+    ['music', 'score', 'lyric', 'sound', 'audio', 'musical', 'title track', 'sound effect', 'sound track', 'song'],
+    ['acting', 'role playing', 'act', 'actress', 'actor', 'role', 'portray', 'character', 'villian', 'performance', 'performed', 'played', 'casting', 'cast'],
+    ['plot', 'story', 'storyline', 'tale', 'romance', 'dialog', 'script', 'storyteller', 'ending', 'storytelling', 'revenge', 'betrayal', 'writing', 'twist', 'drama', 'dialogue'],
+    ['movie', 'film', 'picture', 'moving picture', 'motion picture', 'show', 'picture show', 'pic', 'flick', 'romantic comedy', 'filmography'],
+    ['directing', 'direct', 'direction', 'director', 'filmed', 'filming', 'film making', 'filmmaker', 'cinematic', 'edition', 'cinematography', 'edition', 'rendition']
+]
+
+class Review:
+    def __init__(self, title, goodReviews, badReviews):
+        self.title = title
+        self.goodReviews = goodReviews
+        self.badReviews = badReviews
 
 def load_review(filePath):
     output = ""
@@ -58,30 +70,10 @@ def extract_tags(taggedList):
 
     return nouns
 
-#def countAspectWords(list):
-    #for i in list:
-
-
 if __name__ == '__main__':
+    actionMovies = []
+    badDunkird = load_review('MoreReviewsPerMovie/Action/Bad/NewbadDunkirk.txt')
 
-    badActionTags = load_review('CombinedVocabs/badAction.txt')
-    goodDunkirk = load_review('GenreReviews/GoodActionReviews/goodDunkirk.txt')
-
-    #for i in goodDunkirk:
-        #print(i)
-
-    extractedGoodDunkirk = extract_tags(goodDunkirk)
-    print(extractedGoodDunkirk)
-    #countAspectWords(extractedGoodDunkirk)
-
-
-    
-    badComedyTags = load_review('CombinedVocabs/badComedy.txt')
-    badHorrorTags = load_review('CombinedVocabs/badHorror.txt')
-    badRomanceTags = load_review('CombinedVocabs/badRomance.txt')
-    badSciFiTags = load_review('CombinedVocabs/badSciFi.txt')
-    goodActionTags = load_review('CombinedVocabs/goodAction.txt')
-    goodComedyTags = load_review('CombinedVocabs/goodComedy.txt')
-    goodHorrorTags = load_review('CombinedVocabs/goodHorror.txt')
-    goodRomanceTags = load_review('CombinedVocabs/goodRomance.txt')
-    goodSciFiTags = load_review('CombinedVocabs/goodSciFi.txt')
+    with os.scandir('MoreReviewsPerMovie/Action/Bad') as entries:
+        for entry in entries:
+            print(entry.name)
