@@ -84,7 +84,7 @@ with open('MoreReviewsPerMovie/Action/Bad/NewbadDunkirk.txt', encoding='utf8') a
                         print(child.text, token.text, child.dep_)
 
 # DEPENDENCY PARSING EXAMPLE
-text = 'hi'
+text = 'this movie is great'
 doc = nlp(text)
 for token in doc:
     print("|| ", token.text, "||")

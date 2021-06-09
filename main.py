@@ -34,8 +34,9 @@ class Movie:
         self.goodReview = goodReviewTxt
         self.badReview = badReviewTxt
     
-    def set_scores(self, scores):
-        self.scores = scores
+    def set_scores(self, goodScores, badScores):
+        self.goodScores = goodScores
+        self.badScores = badScores
 
 #preprocesses review and loads it in
 def load_review(filePath):
@@ -64,14 +65,28 @@ def get_movies(genreString):
         movieList.append(movie)
     return movieList
 
+def modify(movie):
+    movie.title = 'changed!'
+
+#extract opinion based aspect scores for a movie
+def model(movie):
+    
+
 if __name__ == '__main__':
     #load movies
     actionMovies = get_movies('Action')
     comedyMovies = get_movies('Comedy')
-    horrorMovies = get_movies('Horror')
+    #horrorMovies = get_movies('Horror')
     romanceMovies = get_movies('Romance')
     scifiMovies = get_movies('SciFi')
+
+    example = actionMovies[0]
+    print(example.title)
+    modify(example)
+    print(example.title)
+    
     
     #evaluate aspect opinions using our model
+
 
     #display results
