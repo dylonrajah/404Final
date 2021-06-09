@@ -6,8 +6,6 @@ import spacy
 from spacy import displacy
 nlp = spacy.load("en_core_web_trf")
 
-
-
 #load all the reviews in a usable way for use in the model
 #get more aspect words
 #filter out unwanted matches based on depencency
@@ -30,50 +28,50 @@ aspect_words = [
     ['directing', 'direct', 'direction', 'director', 'filmed', 'filming', 'film making', 'filmmaker', 'cinematic', 'edition', 'cinematography', 'edition', 'rendition']
 ]
 
-class Review:
-    def __init__(self, title, goodReviews, badReviews):
+class Movie:
+    def __init__(self, title, goodReviewTxt, badReviewTxt):
         self.title = title
-        self.goodReviews = goodReviews
-        self.badReviews = badReviews
+        self.goodReview = goodReviewTxt
+        self.badReview = badReviewTxt
+    
+    def set_scores(self, scores):
+        self.scores = scores
 
+#preprocesses review and loads it in
 def load_review(filePath):
-    output = ""
-    with open(filePath, encoding='utf8') as file:
-        output = file.read().replace('\n', '')
-        output = re.sub(r'\?+', '.', output)
-        output = re.sub(r'\!+', '.', output)
-        output = re.sub(r'\.+', '.', output)
-        outputList = output.split(".")
-    emptyIndices = []
-    for i in range(len(outputList)):
-        outputList[i] = outputList[i].strip()
-        outputList[i] = outputList[i].lower()
-        if outputList[i] == '':
-            emptyIndices.append(i)
-    for i in range(len(emptyIndices)):
-        del outputList[emptyIndices[-(i+1)]]
+    review = ""
+    with open(filePath, encoding='utf8') as f:
+        review = f.read()
+        review = review.lower()
+        review = re.sub(r'\?+', '.', review)
+        review = re.sub(r'\!+', '.', review)
+        review = re.sub(r'\.+', '.', review)
+    return review
 
-    outputListTagged = []
-    for i in range(len(outputList)):
-        tokenizedSentence = nltk.word_tokenize(outputList[i])
-        outputListTagged.append(nltk.pos_tag(tokenizedSentence))
-
-    return outputListTagged
-
-def extract_tags(taggedList):
-    nouns = []
-    for i in taggedList:
-        for j in i:
-            #print(j[1][0])
-            if j[1][0] == 'N':
-                nouns.append(j[0])
-
-    return nouns
+#populates list of Review classes that contains good and bad reviews for each movie in the genre
+def get_movies(genreString):
+    #get title names
+    titleList = []
+    with os.scandir('MoreReviewsPerMovie/'+genreString+'/Good') as entries:
+        for entry in entries:
+            titleList.append(entry.name[:-4])
+    #create Review classes
+    movieList = []
+    for title in titleList:
+        goodReview = load_review('MoreReviewsPerMovie/'+genreString+'/Good/'+title+'.txt')
+        badReview = load_review('MoreReviewsPerMovie/'+genreString+'/Bad/'+title+'.txt')
+        movie = Movie(title, goodReview, badReview)
+        movieList.append(movie)
+    return movieList
 
 if __name__ == '__main__':
-    actionMovies = []
-    badDunkird = load_review('MoreReviewsPerMovie/Action/Bad/Dunkirk.txt')
+    #load movies
+    actionMovies = get_movies('Action')
+    comedyMovies = get_movies('Comedy')
+    horrorMovies = get_movies('Horror')
+    romanceMovies = get_movies('Romance')
+    scifiMovies = get_movies('SciFi')
+    
+    #evaluate aspect opinions using our model
 
-    with os.scandir('MoreReviewsPerMovie/Action/Bad') as entries:
-        for entry in entries:
-            print(entry.name)
+    #display results
