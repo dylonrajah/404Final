@@ -4,13 +4,13 @@ import nltk
 nltk.download('averaged_perceptron_tagger')
 import spacy
 from spacy import displacy
-nlp = spacy.load("en_core_web_trf")
+#nlp = spacy.load("en_core_web_trf")
+nlp = spacy.load("en_core_web_sm")
 
-#load all the reviews in a usable way for use in the model
+#TODO
 #get more aspect words
 #filter out unwanted matches based on depencency
-#bring model from test.py to main.py
-#tally/evaluate results
+#combine good and bad reviews?
 #finalize conclusions:
     #What aspects do people comment on for each genre
     #Common aspects among movies
@@ -18,6 +18,7 @@ nlp = spacy.load("en_core_web_trf")
     #Talk about similarities?
 #final report
 
+#aspect and their terms
 aspects = ['Screenplay', 'Music', 'Acting', 'Plot', 'Movie', 'Direction']
 aspect_words = [
     ['scene', 'scenery', 'animation', 'violence', 'screenplay', 'action', 'animation', 'shot', 'visual', 'prop', 'camera', 'graphic', 'stunt', 'special effect', 'violent', 'violence'],
@@ -27,6 +28,27 @@ aspect_words = [
     ['movie', 'film', 'picture', 'moving picture', 'motion picture', 'show', 'picture show', 'pic', 'flick', 'romantic comedy', 'filmography'],
     ['directing', 'direct', 'direction', 'director', 'filmed', 'filming', 'film making', 'filmmaker', 'cinematic', 'edition', 'cinematography', 'edition', 'rendition']
 ]
+aspect_words_combined = ['scene', 'scenery', 'animation', 'violence', 'screenplay', 'action', 'animation', 'shot',
+                         'visual', 'prop', 'camera', 'graphic', 'stunt', 'special effect', 'violent', 'violence',
+                         'music', 'score', 'lyric', 'sound', 'audio', 'musical', 'title track', 'sound effect',
+                         'sound track', 'song', 'acting', 'role playing', 'act', 'actress', 'actor', 'role', 'portray',
+                         'character', 'villian', 'performance', 'performed', 'played', 'casting', 'cast', 'plot',
+                         'story', 'storyline', 'tale', 'romance', 'dialog', 'script', 'storyteller', 'ending',
+                         'storytelling', 'revenge', 'betrayal', 'writing', 'twist', 'drama', 'dialogue', 'movie',
+                         'film', 'picture', 'moving picture', 'motion picture', 'show', 'picture show', 'pic', 'flick',
+                         'romantic comedy', 'filmography', 'directing', 'direct', 'direction', 'director', 'filmed',
+                         'filming', 'film making', 'filmmaker', 'cinematic', 'edition', 'cinematography', 'edition',
+                         'rendition']
+
+#load opinion words
+def get_opinion_lists():
+    with open('Opinions/positiveWords.txt') as f:
+        positive = f.read().splitlines()
+    with open('Opinions/negativeWords.txt') as f:
+        negative = f.read().splitlines()[31:]
+    return positive, negative
+
+positive_words, negative_words = get_opinion_lists()
 
 class Movie:
     def __init__(self, title, goodReviewTxt, badReviewTxt):
@@ -34,9 +56,11 @@ class Movie:
         self.goodReview = goodReviewTxt
         self.badReview = badReviewTxt
     
-    def set_scores(self, goodScores, badScores):
-        self.goodScores = goodScores
-        self.badScores = badScores
+    def set_scores(self, goodPositiveScores, goodNegativeScores, badPositiveScores, badNegativeScores):
+        self.goodPositiveScores = goodPositiveScores
+        self.goodNegativeScores = goodNegativeScores
+        self.badPositiveScores = badPositiveScores
+        self.badNegativeScores = badNegativeScores
 
 #preprocesses review and loads it in
 def load_review(filePath):
@@ -65,12 +89,42 @@ def get_movies(genreString):
         movieList.append(movie)
     return movieList
 
-def modify(movie):
-    movie.title = 'changed!'
-
 #extract opinion based aspect scores for a movie
 def model(movie):
-    
+    goodDoc = nlp(movie.goodReview)
+    badDoc = nlp(movie.badReview)
+    goodSentences = list(goodDoc.sents)
+    badSentences = list(badDoc.sents)
+    goodPositiveScores = [0, 0, 0, 0, 0, 0]
+    goodNegativeScores = [0, 0, 0, 0, 0, 0]
+    badPositiveScores = [0, 0, 0, 0, 0, 0]
+    badNegativeScores = [0, 0, 0, 0, 0, 0]
+    for sentence in goodSentences:
+        if len(sentence) > 2:
+            for token in sentence:
+                for child in token.children:
+                    if child.text in positive_words:
+                        for i in range(len(aspect_words)):
+                            if token.text in aspect_words[i]:
+                                goodPositiveScores[i] += 1
+                    if child.text in negative_words:
+                        for i in range(len(aspect_words)):
+                            if token.text in aspect_words[i]:
+                                goodNegativeScores[i] += 1
+    for sentence in badSentences:
+        if len(sentence) > 2:
+            for token in sentence:
+                for child in token.children:
+                    if child.text in positive_words:
+                        for i in range(len(aspect_words)):
+                            if token.text in aspect_words[i]:
+                                badPositiveScores[i] += 1
+                    if child.text in negative_words:
+                        for i in range(len(aspect_words)):
+                            if token.text in aspect_words[i]:
+                                badNegativeScores[i] += 1
+
+    movie.set_scores(goodPositiveScores, goodNegativeScores, badPositiveScores, badNegativeScores)
 
 if __name__ == '__main__':
     #load movies
@@ -80,13 +134,11 @@ if __name__ == '__main__':
     romanceMovies = get_movies('Romance')
     scifiMovies = get_movies('SciFi')
 
-    example = actionMovies[0]
-    print(example.title)
-    modify(example)
-    print(example.title)
-    
-    
     #evaluate aspect opinions using our model
-
+    for i in range(len(actionMovies)):
+        model(actionMovies[i])
+        model(comedyMovies[i])
+        model(romanceMovies[i])
+        model(scifiMovies[i])
 
     #display results
