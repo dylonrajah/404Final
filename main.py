@@ -72,7 +72,7 @@ def extract_tags(taggedList):
 
 if __name__ == '__main__':
     actionMovies = []
-    badDunkird = load_review('MoreReviewsPerMovie/Action/Bad/NewbadDunkirk.txt')
+    badDunkird = load_review('MoreReviewsPerMovie/Action/Bad/Dunkirk.txt')
 
     with os.scandir('MoreReviewsPerMovie/Action/Bad') as entries:
         for entry in entries:
