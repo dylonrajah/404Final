@@ -1,11 +1,15 @@
 import os
 import re
 import nltk
-nltk.download('averaged_perceptron_tagger')
+
 import spacy
 from spacy import displacy
 #nlp = spacy.load("en_core_web_trf")
 nlp = spacy.load("en_core_web_sm")
+
+import matplotlib.pyplot as plt
+import numpy as np
+
 
 #TODO
 #get more aspect words
@@ -87,7 +91,7 @@ def get_movies(genreString):
         badReview = load_review('MoreReviewsPerMovie/'+genreString+'/Bad/'+title+'.txt')
         movie = Movie(title, goodReview, badReview)
         movieList.append(movie)
-    return movieList
+    return movieList, titleList
 
 #extract opinion based aspect scores for a movie
 def model(movie):
@@ -128,17 +132,29 @@ def model(movie):
 
 if __name__ == '__main__':
     #load movies
-    actionMovies = get_movies('Action')
-    comedyMovies = get_movies('Comedy')
-    #horrorMovies = get_movies('Horror')
-    romanceMovies = get_movies('Romance')
-    scifiMovies = get_movies('SciFi')
+    #actionMovies, actionTitles = get_movies('Action')
+    #comedyMovies, comedyTitles = get_movies('Comedy')
+    #horrorMovies, horrorTitles = get_movies('Horror')
+    #romanceMovies, romanceTitles = get_movies('Romance')
+    #scifiMovies, scifiTitles = get_movies('SciFi')
+    genreReviews, genres = get_movies('CombinedVocabs')
 
     #evaluate aspect opinions using our model
-    for i in range(len(actionMovies)):
-        model(actionMovies[i])
-        model(comedyMovies[i])
-        model(romanceMovies[i])
-        model(scifiMovies[i])
+    #for i in range(len(actionMovies)):
+        #model(actionMovies[i])
+        #model(comedyMovies[i])
+        #model(romanceMovies[i])
+        #model(scifiMovies[i])
+    for i in range(len(genreReviews)):
+        model(genreReviews[i])
 
     #display results
+    for i in range(len(genreReviews)):
+        print(genreReviews[i].title)
+        positive = []
+        negative = []
+        for j in range(len(genreReviews[i].goodPositiveScores)):
+            positive.append(genreReviews[i].goodPositiveScores[j] + genreReviews[i].badPositiveScores[j])
+            negative.append(genreReviews[i].goodNegativeScores[j] + genreReviews[i].badNegativeScores[j])
+        print('positive: ', positive)
+        print('negative: ', negative)
